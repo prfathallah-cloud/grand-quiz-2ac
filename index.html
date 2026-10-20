@@ -1,0 +1,803 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Grand Quiz 2AC</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Caveat:wght@600;700&display=swap">
+<style>
+/* Layout: one sheet of Seyès paper, red margin on the left, the grade written in red pen. */
+:root {
+  --paper: #fbfcfe;
+  --grid: #d3dcee;
+  --margin: #e0525a;
+  --ink: #1d2a52;
+  --ink-soft: #55608a;
+  --accent: #2c47b8;
+  --accent-fg: #ffffff;
+  --pen: #d23a3a;
+  --ok: #1f7a4d;
+  --bad: #b3261e;
+  --il-bg: #f1f5ff;
+  --il-a: #cfe0ff;
+  --il-b: #cdeed9;
+  --il-c: #ffe3a3;
+  --sun: #f2b01e;
+  --sk1: #bcd9ff;
+  --sk2: #8fb4f5;
+  --sk3: #6b86d6;
+  --sk4: #3b4a8f;
+  --at-o: #e0525a;
+  --at-n: #3f6fe0;
+  --at-c: #7b839c;
+  --at-h: #f1f3f9;
+  --at-fg: #ffffff;
+  --at-fgh: #1d2a52;
+  --font-body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-hand: "Caveat", "Bradley Hand", "Segoe Print", cursive;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #12172a;
+    --grid: #232c4b;
+    --margin: #b84a56;
+    --ink: #dfe5f8;
+    --ink-soft: #9aa5cc;
+    --accent: #8ea2ff;
+    --accent-fg: #10152a;
+    --pen: #ff7a76;
+    --ok: #67d49a;
+    --bad: #ff8f87;
+    --il-bg: #1a2240;
+    --il-a: #2a3f78;
+    --il-b: #21503f;
+    --il-c: #6b5320;
+    --sun: #f5c04a;
+    --sk1: #2b4a86;
+    --sk2: #243c72;
+    --sk3: #1c2d5a;
+    --sk4: #141f42;
+    --at-o: #ff7a76;
+    --at-n: #7b9bff;
+    --at-c: #9aa5cc;
+    --at-h: #dfe5f8;
+    --at-fg: #10152a;
+    --at-fgh: #10152a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #12172a;
+  --grid: #232c4b;
+  --margin: #b84a56;
+  --ink: #dfe5f8;
+  --ink-soft: #9aa5cc;
+  --accent: #8ea2ff;
+  --accent-fg: #10152a;
+  --pen: #ff7a76;
+  --ok: #67d49a;
+  --bad: #ff8f87;
+  --il-bg: #1a2240;
+  --il-a: #2a3f78;
+  --il-b: #21503f;
+  --il-c: #6b5320;
+  --sun: #f5c04a;
+  --sk1: #2b4a86;
+  --sk2: #243c72;
+  --sk3: #1c2d5a;
+  --sk4: #141f42;
+  --at-o: #ff7a76;
+  --at-n: #7b9bff;
+  --at-c: #9aa5cc;
+  --at-h: #dfe5f8;
+  --at-fg: #10152a;
+  --at-fgh: #10152a;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background-color: var(--paper);
+  background-image:
+    repeating-linear-gradient(to bottom, transparent 0, transparent 31px, var(--grid) 31px, var(--grid) 32px),
+    repeating-linear-gradient(to right, transparent 0, transparent 127px, var(--grid) 127px, var(--grid) 128px);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.5;
+  padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  min-height: 100%;
+}
+.sheet {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 20px 4px 24px 20px;
+  border-left: 2px solid var(--margin);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+}
+h1, h2 { text-wrap: balance; line-height: 1.2; margin: 0; }
+h1 { font-size: 1.9rem; }
+.kicker {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0 0 6px;
+}
+.lead { color: var(--ink-soft); margin: 10px 0 24px; max-width: 46ch; }
+
+/* form */
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+label.lbl { font-weight: 700; }
+input[type="text"] {
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  border: 0;
+  border-bottom: 2px solid var(--ink-soft);
+  padding: 8px 2px;
+  border-radius: 0;
+  width: 100%;
+}
+input[type="text"]:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-bottom-color: var(--accent); }
+.error { color: var(--bad); min-height: 1.5em; margin: 0 0 12px; font-weight: 700; }
+
+button {
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--accent);
+  color: var(--accent-fg);
+  border: 2px solid var(--accent);
+  padding: 10px 22px;
+  border-radius: 4px;
+}
+button.ghost { background: transparent; color: var(--accent); }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+/* quiz */
+.progress { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.progress .bar { flex: 1; height: 8px; background: var(--grid); border-radius: 4px; overflow: hidden; }
+.progress .bar i { display: block; height: 100%; background: var(--accent); transition: width 0.25s ease; }
+.progress span { font-variant-numeric: tabular-nums; color: var(--ink-soft); white-space: nowrap; }
+fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+legend { padding: 0; font-size: 1.3rem; font-weight: 700; line-height: 1.35; margin-bottom: 18px; text-wrap: balance; }
+.opts { display: flex; flex-direction: column; gap: 10px; }
+.opt { position: relative; }
+.opt input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.opt span {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px;
+  border: 2px solid var(--grid);
+  background: var(--paper);
+  border-radius: 4px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.opt b {
+  flex: none; width: 28px; height: 28px; display: grid; place-items: center;
+  border: 2px solid var(--ink-soft); border-radius: 50%; font-size: 0.85rem; color: var(--ink-soft);
+}
+.opt input:checked + span { border-color: var(--accent); }
+.opt input:checked + span b { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+.opt input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; }
+.nav { display: flex; justify-content: flex-end; margin-top: 22px; }
+
+/* result (structure and rules from the original snippet) */
+.result-container {
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 0;
+}
+.student-name {
+  display: block;
+  width: 100%;
+  margin: 15px 0 8px;
+  font-size: 22px;
+  font-weight: bold;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.6;
+}
+.student-class {
+  display: block;
+  width: 100%;
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.final-score {
+  font-family: var(--font-hand);
+  font-size: 56px;
+  line-height: 1.1;
+  font-weight: 700;
+  color: var(--pen);
+  display: inline-block;
+  transform: rotate(-3deg);
+  padding: 2px 8px;
+  border-bottom: 4px double var(--pen);
+  font-variant-numeric: tabular-nums;
+}
+.result-container h2 { font-size: 1.5rem; }
+
+.review { margin-top: 12px; }
+.review h3 { font-size: 1.05rem; margin: 0 0 10px; }
+.review ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.review li { padding-bottom: 12px; border-bottom: 1px solid var(--grid); overflow-wrap: anywhere; }
+.review .mine { color: var(--bad); }
+.review .right { color: var(--ok); }
+.allgood { color: var(--ok); font-weight: 700; }
+.again { display: flex; justify-content: center; margin-top: 24px; }
+.note { color: var(--ink-soft); font-size: 0.85rem; margin-top: 28px; }
+
+/* chrono */
+.timerbar {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  max-width: 560px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+}
+.timerbar .tlabel { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); }
+.timerbar .tval { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 1.4rem; min-width: 3.6ch; }
+.timerbar .tfill { flex: 1; min-width: 40px; height: 8px; background: var(--grid); border-radius: 4px; overflow: hidden; }
+.timerbar .tfill i { display: block; height: 100%; width: 100%; background: var(--accent); }
+.timerbar.low { border-color: var(--bad); }
+.timerbar.low .tval { color: var(--bad); }
+.timerbar.low .tfill i { background: var(--bad); }
+.timeup { color: var(--bad); font-weight: 700; text-align: center; margin: 0 0 8px; }
+
+/* illustrations */
+.figbox { margin: 0 0 18px; border: 2px solid var(--grid); border-radius: 6px; overflow: hidden; }
+.fig { display: block; width: 100%; height: auto; }
+.fig .bg { fill: var(--il-bg); }
+.fig text { font: 700 14px var(--font-body); fill: var(--ink); text-anchor: middle; }
+.fig .tl { text-anchor: start; }
+.fig .tr { text-anchor: end; }
+.fig .tm { font-size: 11px; fill: var(--ink-soft); }
+.fig .big { font-size: 34px; }
+.fig .dsp { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 17px; }
+.fig .al { fill: var(--at-fg); font-size: 13px; }
+.fig .alh { fill: var(--at-fgh); font-size: 11px; }
+.fig .pill { fill: var(--paper); stroke: var(--ink-soft); stroke-width: 1.5; }
+.fig .ln { fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.fig .thick { stroke-width: 6; }
+.fig .fa, .fig .fb, .fig .fc, .fig .fp, .fig .bgc { stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: round; }
+.fig .fa { fill: var(--il-a); }
+.fig .fb { fill: var(--il-b); }
+.fig .fc { fill: var(--il-c); }
+.fig .fp { fill: var(--paper); }
+.fig .bgc { fill: var(--il-bg); }
+.fig .cap { fill: var(--pen); stroke: var(--ink); stroke-width: 2; }
+.fig .ar, .fig .ray { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; }
+.fig .warm { stroke: var(--pen); }
+.fig .ray { stroke: var(--sun); }
+.fig .dash2 { stroke-dasharray: 7 6; }
+.fig .ah { fill: var(--accent); }
+.fig .dash { fill: none; stroke: var(--ink-soft); stroke-width: 2.5; stroke-dasharray: 7 6; }
+.fig .shield { fill: none; stroke: var(--accent); stroke-width: 7; stroke-dasharray: 2 9; stroke-linecap: round; }
+.fig .s1 { fill: var(--sk1); } .fig .s2 { fill: var(--sk2); } .fig .s3 { fill: var(--sk3); } .fig .s4 { fill: var(--sk4); }
+.fig .gr { fill: var(--il-b); }
+.fig .sun { fill: var(--sun); stroke: var(--ink); stroke-width: 2.5; }
+.fig .sunray { stroke: var(--sun); stroke-width: 3; stroke-linecap: round; }
+.fig .lt { fill: var(--sun); stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
+.fig .rain { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; }
+.fig .flame { fill: var(--pen); }
+.fig .hose { fill: none; stroke: var(--ink-soft); stroke-width: 5; stroke-linecap: round; }
+.fig .pt { fill: var(--ink); }
+.fig .bd { stroke: var(--ink-soft); stroke-width: 6; stroke-linecap: round; }
+.fig .at { stroke: var(--ink); stroke-width: 2; }
+.fig .at-o { fill: var(--at-o); } .fig .at-n { fill: var(--at-n); } .fig .at-c { fill: var(--at-c); } .fig .at-h { fill: var(--at-h); }
+.fig .hl { fill: #fff; opacity: 0.55; }
+.fig .bar-n { fill: var(--at-n); } .fig .bar-o { fill: var(--at-o); } .fig .bar-c { fill: var(--at-c); }
+.fig .frame { fill: none; stroke: var(--ink); stroke-width: 2.5; }
+
+@media (prefers-reduced-motion: reduce) { .progress .bar i { transition: none; } }
+@media (max-width: 420px) { .final-score { font-size: 48px; } h1 { font-size: 1.6rem; } }
+</style>
+
+<div class="timerbar" id="timerBar" role="timer" hidden>
+  <span class="tlabel">Temps restant</span>
+  <span class="tval" id="timeLeft">10:00</span>
+  <span class="tfill"><i id="timerFill"></i></span>
+</div>
+
+<main class="sheet">
+
+  <!-- Écran 1 : identification -->
+  <section id="screenStart">
+    <p class="kicker">2AC · Physique-Chimie</p>
+    <h1>Grand Quiz de sciences</h1>
+    <p class="lead">30 questions sur 3 chapitres : l'air autour de nous, les propriétés de l'air, les atomes et les molécules. Ton résultat s'affiche à la fin avec la correction détaillée. Tu as 10 minutes : le chrono démarre quand tu cliques sur Commencer.</p>
+    <form id="startForm" novalidate>
+      <div class="field">
+        <label class="lbl" for="inName">Nom et prénom</label>
+        <input type="text" id="inName" autocomplete="name" dir="auto" maxlength="80">
+      </div>
+      <div class="field">
+        <label class="lbl" for="inClass">Classe</label>
+        <input type="text" id="inClass" placeholder="ex. 3ème A" dir="auto" maxlength="30">
+      </div>
+      <p class="error" id="startError" role="alert"></p>
+      <button type="submit">Commencer</button>
+    </form>
+  </section>
+
+  <!-- Écran 2 : questions -->
+  <section id="screenQuiz" hidden>
+    <div class="progress">
+      <div class="bar"><i id="bar" style="width:0%"></i></div>
+      <span id="progressText">Question 1 sur 30</span>
+    </div>
+    <p class="kicker" id="secLabel"></p>
+    <form id="quizForm" novalidate>
+      <fieldset id="qSet"></fieldset>
+      <div class="nav"><button type="submit" id="nextBtn" disabled>Suivant</button></div>
+    </form>
+  </section>
+
+  <!-- Écran 3 : résultat -->
+  <section id="screenResult" hidden>
+    <div class="result-container">
+      <h2>🏆 RÉSULTAT FINAL</h2>
+
+      <div class="student-name">
+        👤 <span id="studentName" dir="auto"></span>
+      </div>
+
+      <div class="student-class">
+        📚 Classe : <span id="studentClass" dir="auto"></span>
+      </div>
+
+      <div class="final-score">
+        🎯 <span id="finalScore"></span>
+      </div>
+    </div>
+
+    <p class="timeup" id="timeNote" hidden>Le temps de 10 minutes est écoulé. Les questions sans réponse comptent comme fausses.</p>
+    <div class="review" id="review"></div>
+    <div class="again"><button type="button" class="ghost" id="againBtn">Recommencer</button></div>
+  </section>
+
+</main>
+
+<script>
+// ---- Questions (source : Grand Quiz 2AC Physique-Chimie) ----
+// answer = position de la bonne réponse dans options, en partant de 0
+// e = explication affichée dans la correction
+const QUESTIONS = [
+  // ---- L’air autour de nous ----
+  { sec: "L’air autour de nous", q: "L’atmosphère est :", options: ["l’enveloppe gazeuse qui entoure la Terre", "une couche liquide qui recouvre la Terre", "une roche située sous les océans", "un mélange uniquement constitué de vapeur d’eau"], answer: 0, e: "L’atmosphère est l’enveloppe gazeuse qui entoure notre planète." },
+  { sec: "L’air autour de nous", q: "Quel est l’ordre correct des quatre couches, du sol vers l’espace ?", options: ["Troposphère → Stratosphère → Mésosphère → Thermosphère", "Stratosphère → Troposphère → Mésosphère → Thermosphère", "Troposphère → Mésosphère → Stratosphère → Thermosphère", "Thermosphère → Mésosphère → Stratosphère → Troposphère"], answer: 0, e: "L’ordre étudié en 2AC est : troposphère, stratosphère, mésosphère, thermosphère." },
+  { sec: "L’air autour de nous", q: "Dans quelle couche vivons-nous ?", options: ["Troposphère", "Stratosphère", "Mésosphère", "Thermosphère"], answer: 0, e: "Nous vivons dans la troposphère, la couche la plus basse de l’atmosphère." },
+  { sec: "L’air autour de nous", q: "Où se trouve principalement la couche d’ozone ?", options: ["Dans la troposphère", "Dans la stratosphère", "Dans la mésosphère", "Dans la thermosphère"], answer: 1, e: "La couche d’ozone se situe principalement dans la stratosphère." },
+  { sec: "L’air autour de nous", q: "Quel est le rôle essentiel de la couche d’ozone ?", options: ["Absorber une grande partie des rayons ultraviolets dangereux", "Produire la totalité du dioxygène de l’air", "Créer les nuages", "Empêcher le vent de circuler"], answer: 0, e: "L’ozone stratosphérique absorbe une grande partie des rayons UV du Soleil." },
+  { sec: "L’air autour de nous", q: "Les nuages, les précipitations et la plupart des phénomènes météorologiques se produisent surtout dans :", options: ["la troposphère", "la stratosphère", "la mésosphère", "la thermosphère"], answer: 0, e: "La troposphère contient toute la vapeur d’eau et est le siège des principaux phénomènes météorologiques." },
+  { sec: "L’air autour de nous", q: "Dans le modèle de cours 2AC, l’épaisseur approximative de la troposphère est :", options: ["15 km", "40 km", "85 km", "500 km"], answer: 0, e: "Le support de cours 2AC donne une épaisseur d’environ 15 km pour la troposphère." },
+  { sec: "L’air autour de nous", q: "Le vent correspond à :", options: ["un déplacement horizontal de l’air", "un déplacement vertical uniquement", "une disparition de l’air", "une transformation de l’air en eau"], answer: 0, e: "Le vent est un mouvement de l’air, notamment lié aux différences de pression entre les régions." },
+  { sec: "L’air autour de nous", q: "Le vent se déplace globalement :", options: ["d’une zone de haute pression vers une zone de basse pression", "d’une zone de basse pression vers une zone de haute pression", "uniquement des océans vers les montagnes", "uniquement des régions froides vers les régions chaudes"], answer: 0, e: "Une différence de pression provoque un déplacement de l’air de la haute pression vers la basse pression." },
+  { sec: "L’air autour de nous", q: "Lorsqu’une masse d’air est chauffée, elle devient généralement :", options: ["moins dense et tend à monter", "plus dense et tend à descendre", "solide et reste au sol", "liquide et s’évapore"], answer: 0, e: "L’air chaud est moins dense que l’air froid ; il a donc tendance à monter." },
+  { sec: "L’air autour de nous", q: "Lorsqu’on monte en altitude, la pression atmosphérique :", options: ["diminue", "augmente", "reste toujours identique", "devient nulle dès 1 km"], answer: 0, e: "La pression atmosphérique diminue lorsque l’altitude augmente." },
+
+  // ---- Propriétés et constituants de l’air ----
+  { sec: "Propriétés et constituants de l’air", q: "L’air est :", options: ["un mélange de plusieurs gaz", "un corps pur constitué uniquement de O₂", "un liquide", "un solide"], answer: 0, e: "L’air atmosphérique est un mélange de plusieurs gaz." },
+  { sec: "Propriétés et constituants de l’air", q: "Le constituant majoritaire de l’air est :", options: ["le diazote N₂", "le dioxygène O₂", "le dioxyde de carbone CO₂", "le dihydrogène H₂"], answer: 0, e: "Le diazote représente environ 78 % de l’air." },
+  { sec: "Propriétés et constituants de l’air", q: "Le dioxygène représente environ :", options: ["21 % de l’air", "78 % de l’air", "50 % de l’air", "1 % de l’air"], answer: 0, e: "Le dioxygène représente environ 21 % de l’air." },
+  { sec: "Propriétés et constituants de l’air", q: "Dans les conditions usuelles étudiées en 2AC, la masse d’un litre d’air est environ :", options: ["1,3 g", "13 g", "0,13 g", "130 g"], answer: 0, e: "On utilise souvent la valeur approximative 1,3 g/L pour la masse volumique de l’air." },
+  { sec: "Propriétés et constituants de l’air", q: "Quand on comprime une quantité d’air enfermée dans une seringue bouchée :", options: ["son volume diminue, sa pression augmente et sa masse reste constante", "son volume augmente et sa masse disparaît", "sa masse augmente automatiquement", "son volume et sa pression diminuent tous les deux"], answer: 0, e: "Pour une même quantité d’air enfermée, la compression diminue le volume et augmente la pression ; la masse d’air reste la même." },
+  { sec: "Propriétés et constituants de l’air", q: "Quelle propriété du gaz permet de gonfler un ballon ?", options: ["L’air est expansible et occupe le volume disponible", "L’air possède une forme propre", "L’air est incompressible", "L’air ne possède pas de masse"], answer: 0, e: "Un gaz occupe l’espace disponible : l’air introduit dans le ballon le remplit." },
+  { sec: "Propriétés et constituants de l’air", q: "Un pneu est gonflé avec une pompe. La masse d’air contenue dans le pneu :", options: ["augmente", "diminue", "reste nécessairement nulle", "se transforme en liquide"], answer: 0, e: "On ajoute de l’air : la quantité et donc la masse d’air contenue dans le pneu augmentent." },
+  { sec: "Propriétés et constituants de l’air", q: "Une salle mesure 5 m × 4 m × 2,5 m. Son volume d’air est :", options: ["50 m³", "25 m³", "10 m³", "100 m³"], answer: 0, e: "V = 5 × 4 × 2,5 = 50 m³." },
+  { sec: "Propriétés et constituants de l’air", q: "50 m³ d’air correspondent à :", options: ["50 000 L", "5 000 L", "500 L", "50 L"], answer: 0, e: "1 m³ = 1000 L, donc 50 m³ = 50 000 L." },
+  { sec: "Propriétés et constituants de l’air", q: "Pour 100 L d’air, le volume approximatif de dioxygène est :", options: ["21 L", "78 L", "1 L", "50 L"], answer: 0, e: "Le dioxygène représente environ 21 % : 21 % de 100 L = 21 L." },
+
+  // ---- Atomes et molécules ----
+  { sec: "Atomes et molécules", q: "Un atome est modélisé en 2AC par :", options: ["une petite sphère", "un mélange de gaz", "un liquide", "un assemblage de plusieurs molécules"], answer: 0, e: "Le modèle simplifié étudié représente l’atome par une petite sphère." },
+  { sec: "Atomes et molécules", q: "Une molécule est :", options: ["un assemblage d’atomes liés entre eux", "un seul atome isolé dans tous les cas", "un mélange de liquides", "une couche de l’atmosphère"], answer: 0, e: "Une molécule est constituée de plusieurs atomes liés entre eux." },
+  { sec: "Atomes et molécules", q: "La formule O₂ signifie qu’une molécule de dioxygène contient :", options: ["2 atomes d’oxygène", "1 atome d’oxygène", "2 atomes de carbone", "8 atomes d’oxygène"], answer: 0, e: "L’indice 2 indique deux atomes d’oxygène dans une molécule O₂." },
+  { sec: "Atomes et molécules", q: "La formule N₂ représente :", options: ["une molécule de diazote", "un atome d’azote", "une molécule de dioxygène", "deux molécules d’azote"], answer: 0, e: "N₂ est la formule de la molécule de diazote." },
+  { sec: "Atomes et molécules", q: "La formule CO₂ contient :", options: ["1 atome de carbone et 2 atomes d’oxygène", "2 atomes de carbone et 1 atome d’oxygène", "1 atome de carbone et 1 atome d’oxygène", "2 atomes de carbone et 2 atomes d’oxygène"], answer: 0, e: "CO₂ signifie 1 C et 2 O dans chaque molécule." },
+  { sec: "Atomes et molécules", q: "Quelle formule correspond à une molécule d’eau ?", options: ["H₂O", "HO₂", "H₂", "O₂"], answer: 0, e: "Une molécule d’eau contient deux atomes d’hydrogène et un atome d’oxygène : H₂O." },
+  { sec: "Atomes et molécules", q: "Une molécule H₂O contient au total :", options: ["3 atomes", "2 atomes", "4 atomes", "1 atome"], answer: 0, e: "H₂O contient 2 H + 1 O, soit 3 atomes au total." },
+  { sec: "Atomes et molécules", q: "Le corps dont les molécules sont constituées de plusieurs types d’atomes est un :", options: ["corps composé", "corps simple", "mélange gazeux uniquement", "atome"], answer: 0, e: "Un corps composé contient des molécules constituées de différents types d’atomes." },
+  { sec: "Atomes et molécules", q: "Quelle proposition représente correctement 3 molécules de dioxygène ?", options: ["3 O₂", "O₆", "3 O", "O₂"], answer: 0, e: "3 molécules de O₂ s’écrivent 3 O₂. Cela correspond à 6 atomes d’oxygène au total." }
+];
+
+// ---- Illustrations : une par question, dans le même ordre que QUESTIONS ----
+const T = (x, y, t, c = "tx") => `<text class="${c}" x="${x}" y="${y}">${t}</text>`;
+const tag = (x, y, t) => {
+  const w = Math.round(t.length * 8.2 + 18);
+  return `<rect class="pill" x="${x - w / 2}" y="${y - 12}" width="${w}" height="24" rx="12"/>` + T(x, y + 5, t);
+};
+const arrow = (x1, y1, x2, y2, c = "ar") => `<line class="${c}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" marker-end="url(#ah)"/>`;
+const arrow2 = (x1, y1, x2, y2) => `<line class="ar dash2" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" marker-start="url(#ah)" marker-end="url(#ah)"/>`;
+const ground = (y = 152) => `<rect class="gr" x="0" y="${y}" width="400" height="${170 - y}"/>`;
+const bond = (x1, y1, x2, y2) => `<line class="bd" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
+const atom = (x, y, r, k, l = "") =>
+  `<circle class="at at-${k}" cx="${x}" cy="${y}" r="${r}"/><circle class="hl" cx="${x - r * 0.32}" cy="${y - r * 0.32}" r="${r * 0.22}"/>` +
+  (l ? `<text class="${k === "h" ? "alh" : "al"}" x="${x}" y="${y + 5}">${l}</text>` : "");
+const dumb = (x, y, k, l = "", r = 11, d = 22) => bond(x - d / 2, y, x + d / 2, y) + atom(x - d / 2, y, r, k, l) + atom(x + d / 2, y, r, k, l);
+const co2s = (x, y) => bond(x - 16, y, x + 16, y) + atom(x - 16, y, 7, "o") + atom(x, y, 8, "c") + atom(x + 16, y, 7, "o");
+const h2o = (x, y) => bond(x, y, x - 12, y + 14) + bond(x, y, x + 12, y + 14) + atom(x, y, 10, "o") + atom(x - 12, y + 14, 6, "h") + atom(x + 12, y + 14, 6, "h");
+const dots = (x0, y0, w, h, cols, rows, k = "n", r = 3) => {
+  let s = "";
+  for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+    const x = x0 + (i + 0.5) * w / cols + ((i * 7 + j * 3) % 5 - 2) * 1.5;
+    const y = y0 + (j + 0.5) * h / rows + ((i * 5 + j * 7) % 5 - 2) * 1.5;
+    s += `<circle class="at at-${k}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}"/>`;
+  }
+  return s;
+};
+const ring = (cx, cy, r, n) => {
+  let s = "";
+  for (let i = 0; i < n; i++) {
+    const t = i * 2 * Math.PI / n;
+    s += `<circle class="at at-n" cx="${(cx + r * Math.cos(t)).toFixed(1)}" cy="${(cy + r * Math.sin(t)).toFixed(1)}" r="3.5"/>`;
+  }
+  return s;
+};
+const cloud = (x, y, s = 1) => `<path class="fp" transform="translate(${x} ${y}) scale(${s})" d="M-30 10a14 14 0 0 1 2-27a20 20 0 0 1 38-6a16 16 0 0 1 24 8a12 12 0 0 1-2 25z"/>`;
+const sun = (x, y, r = 12) => {
+  let s = `<circle class="sun" cx="${x}" cy="${y}" r="${r}"/>`;
+  for (let i = 0; i < 8; i++) {
+    const t = i * Math.PI / 4;
+    s += `<line class="sunray" x1="${(x + (r + 4) * Math.cos(t)).toFixed(1)}" y1="${(y + (r + 4) * Math.sin(t)).toFixed(1)}" x2="${(x + (r + 9) * Math.cos(t)).toFixed(1)}" y2="${(y + (r + 9) * Math.sin(t)).toFixed(1)}"/>`;
+  }
+  return s;
+};
+const house = (x, y) => `<rect class="fp" x="${x - 14}" y="${y - 16}" width="28" height="16"/><path class="fc" d="M${x - 18} ${y - 16}L${x} ${y - 32}L${x + 18} ${y - 16}z"/>`;
+const person = (x, y) => `<circle class="fp" cx="${x}" cy="${y - 20}" r="5"/><path class="ln" d="M${x} ${y - 15}V${y - 5}M${x - 6} ${y - 11}H${x + 6}M${x} ${y - 5}L${x - 5} ${y}M${x} ${y - 5}L${x + 5} ${y}"/>`;
+const plane = (x, y) => `<ellipse class="fp" cx="${x}" cy="${y}" rx="26" ry="6"/><path class="fc" d="M${x - 4} ${y}L${x - 18} ${y - 16}h8L${x + 12} ${y}z"/><path class="fc" d="M${x - 4} ${y}L${x - 18} ${y + 16}h8L${x + 12} ${y}z"/><path class="fc" d="M${x - 24} ${y - 2}l-8-12h6l8 12z"/>`;
+const tree = (x) => `<path class="ln thick" d="M${x} 152Q${x + 2} 122 ${x + 22} 108"/><circle class="fb" cx="${x + 26}" cy="100" r="18"/>`;
+const gauge = (x, y, a) => {
+  const t = a * Math.PI / 180;
+  return `<circle class="fp" cx="${x}" cy="${y}" r="17"/><line class="ln" x1="${x}" y1="${y}" x2="${(x + 12 * Math.cos(t)).toFixed(1)}" y2="${(y - 12 * Math.sin(t)).toFixed(1)}"/><circle class="pt" cx="${x}" cy="${y}" r="2.5"/>`;
+};
+const layers = () =>
+  `<rect class="s4" x="0" y="0" width="400" height="38"/><rect class="s3" x="0" y="38" width="400" height="38"/><rect class="s2" x="0" y="76" width="400" height="38"/><rect class="s1" x="0" y="114" width="400" height="38"/>${ground(152)}`;
+const syringe = (y, px) =>
+  `<rect class="fp" x="80" y="${y - 16}" width="170" height="32" rx="3"/><rect class="fc" x="62" y="${y - 5}" width="18" height="10"/><rect class="cap" x="54" y="${y - 9}" width="8" height="18" rx="2"/>` +
+  dots(84, y - 14, px - 88, 28, 4, 2) +
+  `<line class="ln thick" x1="${px + 8}" y1="${y}" x2="300" y2="${y}"/><rect class="fc" x="${px}" y="${y - 14}" width="8" height="28"/><rect class="fc" x="300" y="${y - 14}" width="6" height="28"/>`;
+const mixAir = () => {
+  const kinds = ["n", "n", "o", "n", "c", "n", "o", "n", "n", "o", "n", "n"];
+  let s = "";
+  for (let j = 0; j < 3; j++) for (let i = 0; i < 4; i++) {
+    const k = kinds[j * 4 + i], x = 152 + i * 32, y = 74 + j * 28;
+    s += k === "c" ? atom(x, y, 6, "c") : dumb(x, y, k, "", 6, 12);
+  }
+  return s;
+};
+const gasJar = () => {
+  const pos = [[52, 62], [100, 56], [130, 64], [176, 100], [56, 104], [104, 96], [146, 106], [60, 138], [108, 132], [148, 140], [170, 60], [186, 138]];
+  const kinds = ["n", "n", "n", "n", "o", "n", "n", "n", "o", "n", "c", "o"];
+  let s = "";
+  pos.forEach(([x, y], i) => { s += kinds[i] === "c" ? co2s(x, y) : dumb(x, y, kinds[i], "", 6, 12); });
+  return s;
+};
+const bottles = () => {
+  let s = "";
+  for (let i = 0; i < 5; i++) {
+    const x = 226 + i * 30;
+    s += `<rect class="fa" x="${x}" y="70" width="18" height="34" rx="3"/><rect class="fa" x="${x + 5}" y="62" width="8" height="8"/>` + T(x + 9, 122, "1 L", "tm");
+  }
+  return s;
+};
+const S = (alt, inner) =>
+  `<svg class="fig" viewBox="0 0 400 170" role="img" aria-label="${alt}"><defs><marker id="ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="ah" d="M0 0L10 5L0 10z"/></marker></defs><rect class="bg" width="400" height="170"/>${inner}</svg>`;
+
+const FIGS = [
+  // 0 : l'atmosphère
+  ["La Terre entourée d’une enveloppe de gaz",
+    `<circle class="fa" cx="200" cy="262" r="168" opacity=".55"/><circle class="fb" cx="200" cy="262" r="132"/>${tag(200, 26, "Enveloppe autour de la Terre")}${arrow(200, 42, 200, 84)}${T(200, 158, "Terre")}`],
+  // 1 : ordre des couches
+  ["Quatre couches superposées, du sol vers l’espace",
+    `${layers()}${arrow(34, 146, 34, 14)}${tag(96, 22, "espace")}${tag(88, 134, "sol")}${tag(300, 76, "Quel ordre ?")}`],
+  // 2 : la couche où nous vivons
+  ["Une maison et une personne au sol, sous les couches de l’atmosphère",
+    `${layers()}${house(120, 152)}${person(170, 152)}${tag(320, 96, "Nous sommes ici")}${arrow(300, 108, 186, 138)}`],
+  // 3 : où est l'ozone
+  ["Molécule d’ozone O₃ à côté des couches de l’atmosphère",
+    `${layers()}<circle class="fp" cx="320" cy="72" r="46"/>${bond(305, 88, 320, 60)}${bond(335, 88, 320, 60)}${atom(305, 88, 11, "o", "O")}${atom(335, 88, 11, "o", "O")}${atom(320, 60, 11, "o", "O")}${tag(310, 140, "Où est l’ozone ?")}`],
+  // 4 : rôle de l'ozone
+  ["Les rayons UV du Soleil arrêtés par une couche protectrice au-dessus de la Terre",
+    `${sun(46, 38, 13)}<path class="shield" d="M10 100Q200 60 390 100"/>${arrow(62, 50, 93, 84, "ray")}${arrow(68, 42, 152, 80, "ray")}${arrow(72, 38, 245, 80, "ray")}${tag(150, 24, "Rayons UV")}${ground(152)}${house(290, 152)}${person(340, 152)}`],
+  // 5 : météo
+  ["Nuages, pluie et éclair au-dessus de montagnes",
+    `${sun(352, 32, 11)}<path class="fb" d="M0 152L70 74L110 114L146 86L230 152z"/>${cloud(260, 60, 1.9)}<path class="rain" d="M222 90l-6 14M240 90l-6 14M258 90l-6 14M276 90l-6 14M294 90l-6 14"/><path class="lt" d="M256 88l-10 24h12l-8 22l20-28h-12l8-18z"/>${ground(152)}`],
+  // 6 : épaisseur de la troposphère
+  ["Échelle d’altitude avec une montagne, un avion et des nuages",
+    `<path class="ln" d="M56 152V20M50 152h12M50 86h12M50 20h12"/>${T(46, 147, "0", "tr")}${T(46, 91, "10", "tr")}${T(46, 25, "20 km", "tr")}<path class="fb" d="M80 152L126 92L172 152z"/>${plane(250, 76)}${cloud(330, 108, 1.2)}${tag(320, 30, "Épaisseur ?")}${ground(152)}`],
+  // 7 : le vent
+  ["Des arbres penchés et une manche à air montrent le vent",
+    `${arrow(24, 26, 250, 26)}${arrow(44, 46, 270, 46)}${arrow(24, 66, 230, 66)}${tree(96)}${tree(196)}<path class="ln thick" d="M340 152V84"/><path class="fb" d="M340 84L386 90V104L340 108z"/><path class="ln" d="M356 87V106M370 89V105"/>${tag(330, 28, "Vent")}${ground(152)}`],
+  // 8 : vent et pression
+  ["Deux zones d’air, l’une avec beaucoup de particules et l’autre avec peu",
+    `<rect class="fp" x="20" y="38" width="150" height="76" rx="6"/><rect class="fp" x="230" y="38" width="150" height="76" rx="6"/>${dots(24, 42, 142, 68, 8, 4)}${dots(234, 42, 142, 68, 3, 2)}${tag(95, 20, "Zone A")}${tag(305, 20, "Zone B")}${arrow2(34, 142, 366, 142)}${tag(200, 142, "Vent ?")}`],
+  // 9 : air chaud
+  ["Une montgolfière chauffée par une flamme",
+    `<path class="fc" d="M200 16C146 16 150 92 186 114H214C250 92 254 16 200 16z"/><path class="ln" d="M200 16C184 50 188 92 192 114M200 16C216 50 212 92 208 114"/><path class="ln" d="M188 114L192 134M212 114L208 134"/><rect class="fp" x="190" y="134" width="20" height="14"/><path class="flame" d="M200 112q-7 9 0 15q7-6 0-15z"/>${arrow(100, 148, 100, 64, "ar warm")}${arrow(300, 148, 300, 64, "ar warm")}${tag(100, 40, "Air chauffé")}${tag(300, 40, "Il monte ?")}${ground(152)}`],
+  // 10 : pression et altitude
+  ["Deux baromètres, un au pied et un au sommet d’une montagne",
+    `<path class="fb" d="M40 152L200 30L360 152z"/><path class="fp" d="M180 46L200 30L220 46L210 42L200 52L190 42z"/>${gauge(96, 128, 40)}${gauge(200, 86, 145)}${arrow(336, 150, 336, 40)}${tag(336, 24, "altitude")}${ground(152)}`],
+  // 11 : l'air est un mélange
+  ["Un bocal d’air contenant des particules de plusieurs sortes",
+    `<rect class="fp" x="130" y="50" width="140" height="102" rx="12"/><rect class="fc" x="140" y="38" width="120" height="14" rx="3"/>${mixAir()}${tag(60, 94, "Air")}${arrow(88, 94, 126, 94)}${tag(340, 94, "Mélange ?")}`],
+  // 12 : constituant majoritaire
+  ["Un bocal de molécules d’air et la légende N₂, O₂, CO₂",
+    `<rect class="fp" x="24" y="36" width="180" height="120" rx="12"/>${gasJar()}${dumb(262, 62, "n", "", 8, 16)}${T(298, 67, "N₂", "tl")}${dumb(262, 98, "o", "", 8, 16)}${T(298, 103, "O₂", "tl")}${co2s(262, 134)}${T(298, 139, "CO₂", "tl")}`],
+  // 13 : pourcentage de dioxygène
+  ["Une barre qui représente la composition de l’air, avec trois gaz",
+    `${T(200, 30, "Composition de l’air")}<rect class="bar-n" x="50" y="64" width="234" height="34"/><rect class="bar-o" x="284" y="64" width="63" height="34"/><rect class="bar-c" x="347" y="64" width="3" height="34"/><rect class="frame" x="50" y="64" width="300" height="34"/>${tag(315, 46, "O₂ = ?")}<rect class="bar-n" x="60" y="124" width="14" height="14"/>${T(82, 136, "N₂", "tl")}<rect class="bar-o" x="150" y="124" width="14" height="14"/>${T(172, 136, "O₂", "tl")}<rect class="bar-c" x="240" y="124" width="14" height="14"/>${T(262, 136, "autres gaz", "tl")}`],
+  // 14 : masse d'un litre d'air
+  ["Un flacon d’un litre d’air posé sur une balance",
+    `<rect class="fc" x="120" y="136" width="160" height="16" rx="4"/><path class="ln" d="M140 128H260"/><rect class="fp" x="176" y="74" width="48" height="54" rx="6"/><rect class="fp" x="190" y="54" width="20" height="22"/>${dots(180, 80, 40, 44, 3, 3)}<rect class="fb" x="296" y="96" width="76" height="34" rx="4"/>${T(334, 119, "? g", "dsp")}<path class="ln" d="M280 144H296V130"/>${tag(200, 26, "1 litre d’air")}`],
+  // 15 : seringue comprimée
+  ["Une seringue bouchée avant et après avoir poussé le piston",
+    `${syringe(48, 232)}${syringe(120, 148)}${arrow(346, 120, 314, 120)}${tag(36, 14, "avant")}${tag(36, 86, "après")}`],
+  // 16 : ballon qui se gonfle
+  ["Un ballon qui se gonfle d’air",
+    `<ellipse class="fa" cx="80" cy="100" rx="24" ry="28"/><path class="fa" d="M74 126l6 10l6-10z"/>${dots(62, 84, 36, 32, 2, 2)}${arrow(130, 92, 190, 92)}${tag(160, 66, "on souffle")}<ellipse class="fa" cx="292" cy="84" rx="62" ry="68"/><path class="fa" d="M284 150l8 11l8-11z"/>${dots(246, 46, 92, 76, 4, 3)}`],
+  // 17 : pompe et pneu
+  ["Une pompe à vélo reliée à un pneu qu’elle gonfle",
+    `<line class="ln thick" x1="70" y1="30" x2="70" y2="92"/><rect class="fc" x="50" y="20" width="40" height="10" rx="4"/><rect class="fp" x="58" y="62" width="24" height="76" rx="3"/><rect class="fc" x="44" y="138" width="52" height="10" rx="3"/>${arrow(112, 28, 112, 62)}<path class="hose" d="M82 128C150 164 206 134 254 96"/><circle class="fp" cx="310" cy="90" r="54"/><circle class="bgc" cx="310" cy="90" r="36"/>${ring(310, 90, 45, 14)}${tag(310, 22, "Pneu")}`],
+  // 18 : volume de la salle
+  ["Une salle de 5 m de long, 4 m de large et 2,5 m de haut",
+    `<path class="fa" d="M100 56L140 30H290L250 56z"/><path class="fb" d="M250 56L290 30V104L250 130z"/><rect class="fp" x="100" y="56" width="150" height="74"/>${T(175, 152, "5 m")}${T(298, 72, "4 m", "tl")}${T(92, 98, "2,5 m", "tr")}${tag(175, 94, "Volume ?")}`],
+  // 19 : m³ en litres
+  ["Un cube de 1 m³ comparé à des bouteilles d’un litre",
+    `<path class="fa" d="M40 62L70 36H150L120 62z"/><path class="fb" d="M120 62L150 36V112L120 138z"/><rect class="fp" x="40" y="62" width="80" height="76"/>${T(80, 106, "1 m³")}${arrow(166, 88, 214, 88)}${bottles()}${tag(300, 148, "1 m³ = ? L")}`],
+  // 20 : 100 L d'air
+  ["Un récipient de 100 L d’air dont une partie est du dioxygène",
+    `<rect class="fp" x="150" y="20" width="100" height="130" rx="6"/><rect class="fc" x="152" y="122" width="96" height="26" rx="3"/>${dots(154, 26, 92, 92, 5, 4, "n")}${dots(154, 124, 92, 22, 5, 1, "o")}<path class="ln" d="M150 20h-10M150 85h-8M150 150h-10"/>${T(132, 25, "100 L", "tr")}${tag(330, 135, "O₂ = ? L")}${arrow(284, 135, 254, 135)}${tag(330, 58, "Air : 100 L")}`],
+  // 21 : atome
+  ["Une loupe grossit la matière et montre une sphère",
+    `<path class="fc" d="M36 118l12-22l24-4l18 16l-6 20l-30 6z"/>${arrow(112, 100, 190, 88)}${tag(70, 72, "Matière")}<path class="ln thick" d="M288 118L332 158"/><circle class="fp" cx="250" cy="80" r="52"/>${atom(250, 80, 24, "n")}${tag(190, 152, "Modèle de l’atome")}`],
+  // 22 : molécule
+  ["Quatre atomes de couleurs différentes liés entre eux",
+    `${bond(200, 80, 150, 48)}${bond(200, 80, 250, 48)}${bond(200, 80, 200, 132)}${atom(200, 80, 20, "c", "C")}${atom(150, 48, 14, "h", "H")}${atom(250, 48, 14, "h", "H")}${atom(200, 132, 16, "o", "O")}${tag(330, 80, "Molécule ?")}${arrow(278, 80, 224, 80)}`],
+  // 23 : O2
+  ["Deux sphères rouges reliées, marquées O",
+    `${T(200, 42, "O₂", "big")}${bond(170, 90, 230, 90)}${atom(170, 90, 26, "o", "O")}${atom(230, 90, 26, "o", "O")}${tag(200, 146, "Combien d’atomes ?")}`],
+  // 24 : N2
+  ["Deux sphères bleues reliées, marquées N",
+    `${T(200, 42, "N₂", "big")}${bond(170, 90, 230, 90)}${atom(170, 90, 26, "n", "N")}${atom(230, 90, 26, "n", "N")}${tag(200, 146, "Que représente N₂ ?")}`],
+  // 25 : CO2
+  ["Une sphère grise entre deux sphères rouges, alignées",
+    `${T(200, 42, "CO₂", "big")}${bond(138, 90, 262, 90)}${atom(138, 90, 22, "o", "O")}${atom(200, 90, 24, "c", "C")}${atom(262, 90, 22, "o", "O")}${tag(200, 146, "Quels atomes ?")}`],
+  // 26 : formule de l'eau
+  ["Une goutte d’eau et une molécule formée d’un gros atome rouge et de deux petits blancs",
+    `<path class="fa" d="M70 34C60 60 46 74 46 94a24 24 0 0 0 48 0C94 74 80 60 70 34z"/>${T(70, 148, "eau")}${arrow(112, 90, 172, 90)}${bond(260, 66, 224, 108)}${bond(260, 66, 296, 108)}${atom(260, 66, 22, "o", "O")}${atom(224, 108, 14, "h", "H")}${atom(296, 108, 14, "h", "H")}${tag(330, 150, "Formule ?")}`],
+  // 27 : atomes dans H2O
+  ["Une molécule d’eau entourée d’un cercle pointillé",
+    `<ellipse class="dash" cx="200" cy="80" rx="92" ry="64"/>${bond(200, 52, 160, 102)}${bond(200, 52, 240, 102)}${atom(200, 52, 24, "o", "O")}${atom(160, 102, 16, "h", "H")}${atom(240, 102, 16, "h", "H")}${tag(200, 156, "Total d’atomes ?")}`],
+  // 28 : corps composé
+  ["Deux boîtes : l’une avec des molécules identiques, l’autre avec des molécules différentes",
+    `<rect class="fp" x="20" y="32" width="165" height="92" rx="6"/><rect class="fp" x="215" y="32" width="165" height="92" rx="6"/>${dumb(60, 78, "o")}${dumb(112, 60, "o")}${dumb(142, 100, "o")}${h2o(250, 58)}${co2s(336, 66)}${co2s(268, 108)}${h2o(336, 96)}${tag(102, 18, "Corps A")}${tag(298, 18, "Corps B")}${tag(200, 150, "Lequel est composé ?")}`],
+  // 29 : 3 molécules de O2
+  ["Trois molécules de dioxygène alignées",
+    `${dumb(70, 84, "o", "O", 16, 32)}${dumb(200, 84, "o", "O", 16, 32)}${dumb(330, 84, "o", "O", 16, 32)}${tag(200, 30, "3 molécules de dioxygène")}${tag(200, 140, "Comment l’écrire ?")}`]
+].map(([alt, inner]) => S(alt, inner));
+
+// ---- Variables utilisées par l'écran de résultat ----
+let studentName = "";
+let studentClass = "";
+let score = 0;
+
+let current = 0;
+let answers = [];
+const $ = (id) => document.getElementById(id);
+
+// ---- Chrono : 10 minutes ----
+const QUIZ_SECONDS = 600;
+let endAt = 0;
+let tickId = null;
+let timedOut = false;
+
+function fmt(sec) {
+  return String(Math.floor(sec / 60)).padStart(2, "0") + ":" + String(sec % 60).padStart(2, "0");
+}
+function startTimer() {
+  timedOut = false;
+  endAt = Date.now() + QUIZ_SECONDS * 1000;
+  $("timerBar").hidden = false;
+  clearInterval(tickId);
+  tick();
+  tickId = setInterval(tick, 250);
+}
+function stopTimer() {
+  clearInterval(tickId);
+  $("timerBar").hidden = true;
+}
+function tick() {
+  const left = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+  $("timeLeft").textContent = fmt(left);
+  $("timerBar").classList.toggle("low", left <= 60);
+  $("timerFill").style.width = (left / QUIZ_SECONDS * 100) + "%";
+  if (left <= 0) {
+    clearInterval(tickId);
+    timedOut = true;
+    const c = document.querySelector('input[name="choice"]:checked');
+    if (c && answers[current] === undefined) answers[current] = Number(c.value);
+    finish();
+  }
+}
+const LETTERS = ["A", "B", "C", "D", "E", "F"];
+
+function show(screen) {
+  ["screenStart", "screenQuiz", "screenResult"].forEach((id) => { $(id).hidden = id !== screen; });
+  window.scrollTo(0, 0);
+}
+
+$("startForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const n = $("inName").value.trim();
+  const c = $("inClass").value.trim();
+  if (!n || !c) {
+    $("startError").textContent = !n ? "Écris ton nom et ton prénom pour continuer." : "Écris ta classe pour continuer.";
+    (!n ? $("inName") : $("inClass")).focus();
+    return;
+  }
+  $("startError").textContent = "";
+  studentName = n;
+  studentClass = c;
+  current = 0;
+  answers = [];
+  score = 0;
+  shuffleOptions();
+  renderQuestion();
+  show("screenQuiz");
+  startTimer();
+});
+
+// Mélange les choix pour répartir les bonnes réponses entre A, B, C et D
+function shuffleOptions() {
+  QUESTIONS.forEach((x) => {
+    const choices = x.options.map((text, i) => ({ text, correct: i === x.answer }));
+    for (let i = choices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [choices[i], choices[j]] = [choices[j], choices[i]];
+    }
+    x.options = choices.map((c) => c.text);
+    x.answer = choices.findIndex((c) => c.correct);
+  });
+}
+
+function renderQuestion() {
+  const item = QUESTIONS[current];
+  const total = QUESTIONS.length;
+  $("progressText").textContent = "Question " + (current + 1) + " sur " + total;
+  $("bar").style.width = (current / total * 100) + "%";
+  const set = $("qSet");
+  set.innerHTML = "";
+  $("secLabel").textContent = item.sec;
+  const legend = document.createElement("legend");
+  legend.textContent = item.q;
+  set.appendChild(legend);
+  if (FIGS[current]) {
+    const fig = document.createElement("div");
+    fig.className = "figbox";
+    fig.innerHTML = FIGS[current];
+    set.appendChild(fig);
+  }
+  const wrap = document.createElement("div");
+  wrap.className = "opts";
+  item.options.forEach((text, i) => {
+    const label = document.createElement("label");
+    label.className = "opt";
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = "choice";
+    input.value = String(i);
+    input.addEventListener("change", () => { $("nextBtn").disabled = false; });
+    const span = document.createElement("span");
+    const badge = document.createElement("b");
+    badge.textContent = LETTERS[i];
+    const t = document.createElement("em");
+    t.style.fontStyle = "normal";
+    t.textContent = text;
+    span.append(badge, t);
+    label.append(input, span);
+    wrap.appendChild(label);
+  });
+  set.appendChild(wrap);
+  $("nextBtn").disabled = true;
+  $("nextBtn").textContent = current === total - 1 ? "Terminer" : "Suivant";
+}
+
+$("quizForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const checked = document.querySelector('input[name="choice"]:checked');
+  if (!checked) return;
+  answers[current] = Number(checked.value);
+  if (current < QUESTIONS.length - 1) {
+    current += 1;
+    renderQuestion();
+  } else {
+    finish();
+  }
+});
+
+function finish() {
+  stopTimer();
+  $("timeNote").hidden = !timedOut;
+  score = answers.reduce((sum, a, i) => sum + (a === QUESTIONS[i].answer ? 1 : 0), 0);
+  document.getElementById("studentName").textContent = studentName;
+  document.getElementById("studentClass").textContent = studentClass;
+  document.getElementById("finalScore").textContent = score + " / " + QUESTIONS.length;
+  renderReview();
+  show("screenResult");
+}
+
+function renderReview() {
+  const box = $("review");
+  box.innerHTML = "";
+  const secs = [];
+  QUESTIONS.forEach((x) => { if (!secs.includes(x.sec)) secs.push(x.sec); });
+  const hc = document.createElement("h3");
+  hc.textContent = "Résultat par chapitre";
+  box.appendChild(hc);
+  const ulc = document.createElement("ul");
+  ulc.style.marginBottom = "24px";
+  secs.forEach((name) => {
+    let total = 0, good = 0;
+    QUESTIONS.forEach((x, i) => { if (x.sec === name) { total++; if (answers[i] === x.answer) good++; } });
+    const li = document.createElement("li");
+    li.textContent = name + " : " + good + " / " + total;
+    ulc.appendChild(li);
+  });
+  box.appendChild(ulc);
+  const wrong = [];
+  QUESTIONS.forEach((item, i) => { if (answers[i] !== item.answer) wrong.push(i); });
+  const h = document.createElement("h3");
+  if (!wrong.length) {
+    h.textContent = "Correction";
+    box.appendChild(h);
+    const p = document.createElement("p");
+    p.className = "allgood";
+    p.textContent = "Aucune erreur. Toutes les réponses sont justes.";
+    box.appendChild(p);
+    return;
+  }
+  h.textContent = "Correction des erreurs";
+  box.appendChild(h);
+  const ul = document.createElement("ul");
+  wrong.forEach((i) => {
+    const item = QUESTIONS[i];
+    const li = document.createElement("li");
+    const q = document.createElement("strong");
+    q.textContent = (i + 1) + ". " + item.q;
+    const mine = document.createElement("div");
+    mine.className = "mine";
+    mine.textContent = "Ta réponse : " + (answers[i] === undefined ? "sans réponse" : item.options[answers[i]]);
+    const right = document.createElement("div");
+    right.className = "right";
+    right.textContent = "Bonne réponse : " + item.options[item.answer];
+    const why = document.createElement("div");
+    why.style.color = "var(--ink-soft)";
+    why.textContent = item.e;
+    li.append(q, mine, right, why);
+    ul.appendChild(li);
+  });
+  box.appendChild(ul);
+}
+
+$("againBtn").addEventListener("click", () => {
+  $("inName").value = studentName;
+  $("inClass").value = studentClass;
+  show("screenStart");
+});
+</script>
+
+</body></html>
