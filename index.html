@@ -604,13 +604,21 @@ const QUIZ_SECONDS = 600;
 let endAt = 0;
 let tickId = null;
 let timedOut = false;
+let quizStartedAt = 0;
+let resultsSubmitted = false;
+
+// Après le déploiement du Google Apps Script, collez ici son URL /exec.
+// Tant que cette valeur n'est pas configurée, le quiz fonctionne normalement
+// mais les résultats ne sont pas envoyés vers Google Sheets.
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwuHRlYhOoLZ0FuLoe1R4xGaw9OOQxN9eveQiZbS819nsv-xGvHt3iNSg60EuI0pYGG/exec ";
 
 function fmt(sec) {
   return String(Math.floor(sec / 60)).padStart(2, "0") + ":" + String(sec % 60).padStart(2, "0");
 }
 function startTimer() {
   timedOut = false;
-  endAt = Date.now() + QUIZ_SECONDS * 1000;
+  quizStartedAt = Date.now();
+  endAt = quizStartedAt + QUIZ_SECONDS * 1000;
   $("timerBar").hidden = false;
   clearInterval(tickId);
   tick();
@@ -655,6 +663,7 @@ $("startForm").addEventListener("submit", (e) => {
   current = 0;
   answers = [];
   score = 0;
+  resultsSubmitted = false;
   shuffleOptions();
   renderQuestion();
   show("screenQuiz");
@@ -729,6 +738,40 @@ $("quizForm").addEventListener("submit", (e) => {
   }
 });
 
+function buildResultPayload() {
+  const sectionResults = {};
+  QUESTIONS.forEach((item, i) => {
+    if (!sectionResults[item.sec]) sectionResults[item.sec] = { correct: 0, total: 0 };
+    sectionResults[item.sec].total += 1;
+    if (answers[i] === item.answer) sectionResults[item.sec].correct += 1;
+  });
+  return {
+    studentName,
+    studentClass,
+    score,
+    totalQuestions: QUESTIONS.length,
+    timedOut,
+    timeSpentSeconds: Math.min(QUIZ_SECONDS, Math.max(0, Math.round((Date.now() - quizStartedAt) / 1000))),
+    sectionResults,
+    submittedAt: new Date().toISOString()
+  };
+}
+
+function submitResultToSheets() {
+  if (resultsSubmitted) return;
+  resultsSubmitted = true;
+  if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("COLLEZ_ICI_URL")) return;
+  const payload = buildResultPayload();
+  // no-cors évite le blocage CORS du navigateur avec Apps Script.
+  // Le quiz et son écran de correction ne dépendent pas de la réponse réseau.
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  }).catch((err) => console.error("Envoi du résultat vers Google Sheets impossible:", err));
+}
+
 function finish() {
   stopTimer();
   $("timeNote").hidden = !timedOut;
@@ -737,6 +780,7 @@ function finish() {
   document.getElementById("studentClass").textContent = studentClass;
   document.getElementById("finalScore").textContent = score + " / " + QUESTIONS.length;
   renderReview();
+  submitResultToSheets();
   show("screenResult");
 }
 
